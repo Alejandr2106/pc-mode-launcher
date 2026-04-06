@@ -1,10 +1,13 @@
 from dataclasses import dataclass, field
-
+from app.models.action_type import ActionType
 
 @dataclass
 class Action:
-    type: str
-    value: str
+    type: ActionType
+    target: str
+    label: str = ""
+    enabled: bool = True
+    delay_ms: int = 0
 
 
 @dataclass

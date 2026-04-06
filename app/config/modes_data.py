@@ -1,5 +1,5 @@
 from app.models.mode import Action, Mode, SubMode
-
+from app.models.action_type import ActionType
 
 MODES: list[Mode] = [
     Mode(
@@ -12,16 +12,19 @@ MODES: list[Mode] = [
                 description="Open Ankama Launcher, DofusGuide and Discord.",
                 actions=[
                     Action(
-                        type="open_app",
-                        value=r"C:\Users\WIN\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Ankama\Ankama Launcher.lnk",
+                        type=ActionType.OPEN_APP,
+                        target=r"C:\Users\WIN\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Ankama\Ankama Launcher.lnk",
+                        label="Opening Ankama Launcher",
                     ),
                     Action(
-                        type="open_app",
-                        value=r"C:\Users\WIN\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\SBARBERI Enzo\DofusGuide\DofusGuide.appref-ms",
+                        type=ActionType.OPEN_APP,
+                        target=r"C:\Users\WIN\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\SBARBERI Enzo\DofusGuide\DofusGuide.appref-ms",
+                        label="Opening DofusGuide",
                     ),
                     Action(
-                        type="open_app",
-                        value=r"C:\Users\WIN\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Discord Inc\Discord.lnk",
+                        type=ActionType.OPEN_APP,
+                        target=r"C:\Users\WIN\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Discord Inc\Discord.lnk",
+                        label="Opening Discord",
                     ),
                 ],
             ),
