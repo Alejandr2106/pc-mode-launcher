@@ -34,12 +34,12 @@ MAIN_STYLES = """
         background-color: #121927;
         border: 1px solid #233049;
         border-radius: 14px;
-        min-width: 32px;
-        max-width: 32px;
-        min-height: 32px;
-        max-height: 32px;
+        min-width: 26px;
+        max-width: 26px;
+        min-height: 26px;
+        max-height: 26px;
         color: #eef4ff;
-        font-size: 14px;
+        font-size: 12px;
     }
 
     QPushButton#iconButton:hover {
@@ -59,11 +59,11 @@ MAIN_STYLES = """
     }
 
     QLabel#iconTileEmoji {
-        font-size: 30px;
+        font-size: 22px;
     }
 
     QLabel#iconTileLabel {
-        font-size: 12px;
+        font-size: 10px;
         font-weight: 600;
         color: #dce7ff;
     }

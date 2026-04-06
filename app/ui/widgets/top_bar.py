@@ -12,7 +12,7 @@ class TopBar(QFrame):
         self.setObjectName("topBar")
 
         layout = QHBoxLayout()
-        layout.setContentsMargins(6, 6, 6, 6)
+        layout.setContentsMargins(2, 2, 2, 2)
         layout.setSpacing(8)
 
         self.back_button = QPushButton("←")

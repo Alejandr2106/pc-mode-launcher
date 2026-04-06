@@ -27,8 +27,8 @@ class MainWindow(QMainWindow):
         self._drag_position = QPoint()
 
         self.setWindowTitle("PC Mode Launcher")
-        self.resize(300, 460)
-        self.setMinimumSize(260, 380)
+        self.resize(260, 360)
+        self.setMinimumSize(240, 320)
 
         self.setWindowFlags(Qt.FramelessWindowHint | Qt.Window | Qt.WindowStaysOnTopHint)
         self.setAttribute(Qt.WA_TranslucentBackground)
@@ -42,7 +42,7 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(central_widget)
 
         outer_layout = QVBoxLayout()
-        outer_layout.setContentsMargins(12, 12, 12, 12)
+        outer_layout.setContentsMargins(2, 2, 2, 2)
         outer_layout.setSpacing(0)
         central_widget.setLayout(outer_layout)
 
@@ -50,7 +50,7 @@ class MainWindow(QMainWindow):
         self.shell.setObjectName("appShell")
 
         shell_layout = QVBoxLayout()
-        shell_layout.setContentsMargins(14, 14, 14, 14)
+        shell_layout.setContentsMargins(10, 10, 10, 10)
         shell_layout.setSpacing(12)
         self.shell.setLayout(shell_layout)
 
@@ -77,7 +77,7 @@ class MainWindow(QMainWindow):
 
         shell_layout.addWidget(self.top_bar)
         shell_layout.addWidget(self.stack, 1)
-        # shell_layout.addWidget(status_bar)
+        shell_layout.addWidget(status_bar)
 
         outer_layout.addWidget(self.shell)
 

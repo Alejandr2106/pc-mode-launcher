@@ -1,5 +1,5 @@
-from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QGridLayout, QWidget
+from PySide6.QtCore import Signal, Qt
+from PySide6.QtWidgets import QVBoxLayout, QWidget, QHBoxLayout
 
 from app.models.mode import Mode
 from app.ui.widgets.icon_tile import IconTile
@@ -14,22 +14,28 @@ class HomePage(QWidget):
         self._setup_ui()
 
     def _setup_ui(self) -> None:
-        layout = QGridLayout()
-        layout.setContentsMargins(6, 6, 6, 6)
-        layout.setHorizontalSpacing(12)
-        layout.setVerticalSpacing(12)
+        main_layout = QVBoxLayout()
+        main_layout.setContentsMargins(0, 0, 0, 0)
 
-        row = 0
-        col = 0
+        column_layout = QVBoxLayout()
+        column_layout.setSpacing(10)
 
         for mode in self.modes:
             tile = IconTile(mode.emoji, mode.name)
-            tile.clicked.connect(lambda checked=False, selected_mode=mode: self.mode_selected.emit(selected_mode))
-            layout.addWidget(tile, row, col)
+            tile.clicked.connect(
+                lambda checked=False, selected_mode=mode:
+                self.mode_selected.emit(selected_mode)
+            )
+            column_layout.addWidget(tile)
 
-            col += 1
-            if col > 1:
-                col = 0
-                row += 1
+        column_layout.addStretch()
 
-        self.setLayout(layout)
+        center_layout = QHBoxLayout()
+        center_layout.addStretch()
+        center_layout.addLayout(column_layout)
+        center_layout.addStretch()
+
+        main_layout.addLayout(center_layout)
+        main_layout.addStretch()
+
+        self.setLayout(main_layout)

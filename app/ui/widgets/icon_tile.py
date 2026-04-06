@@ -10,7 +10,7 @@ class IconTile(QFrame):
 
         self.setObjectName("iconTile")
         self.setCursor(Qt.PointingHandCursor)
-        self.setFixedSize(120, 120)
+        self.setFixedSize(80, 80)
 
         layout = QVBoxLayout()
         layout.setContentsMargins(10, 10, 10, 10)
