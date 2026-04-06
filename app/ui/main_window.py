@@ -1,17 +1,21 @@
+from PySide6.QtCore import Qt, QPoint
 from PySide6.QtWidgets import (
     QFrame,
-    QHBoxLayout,
-    QLabel,
     QMainWindow,
+    QStackedWidget,
     QVBoxLayout,
     QWidget,
+    QLabel,
+    QHBoxLayout,
 )
 
 from app.config.modes_data import MODES
 from app.core.launcher_service import LauncherService
-from app.models.mode import SubMode
+from app.models.mode import Mode, SubMode
+from app.ui.pages.category_page import CategoryPage
+from app.ui.pages.home_page import HomePage
 from app.ui.styles.main_styles import MAIN_STYLES
-from app.ui.widgets.mode_card import ModeCard
+from app.ui.widgets.top_bar import TopBar
 
 
 class MainWindow(QMainWindow):
@@ -19,96 +23,113 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.launcher_service = LauncherService()
+        self.current_mode: Mode | None = None
+        self._drag_position = QPoint()
 
         self.setWindowTitle("PC Mode Launcher")
-        self.resize(1200, 720)
+        self.resize(300, 460)
+        self.setMinimumSize(260, 380)
+
+        self.setWindowFlags(Qt.FramelessWindowHint | Qt.Window | Qt.WindowStaysOnTopHint)
+        self.setAttribute(Qt.WA_TranslucentBackground)
 
         self._setup_ui()
         self._apply_styles()
 
     def _setup_ui(self) -> None:
         central_widget = QWidget()
+        central_widget.setObjectName("rootBackground")
         self.setCentralWidget(central_widget)
 
-        main_layout = QVBoxLayout()
-        main_layout.setContentsMargins(24, 24, 24, 24)
-        main_layout.setSpacing(20)
-        central_widget.setLayout(main_layout)
+        outer_layout = QVBoxLayout()
+        outer_layout.setContentsMargins(12, 12, 12, 12)
+        outer_layout.setSpacing(0)
+        central_widget.setLayout(outer_layout)
 
-        header = self._build_header()
-        cards_section = self._build_cards_section()
-        status_bar = self._build_status_section()
+        self.shell = QFrame()
+        self.shell.setObjectName("appShell")
 
-        main_layout.addWidget(header)
-        main_layout.addWidget(cards_section, 1)
-        main_layout.addWidget(status_bar)
+        shell_layout = QVBoxLayout()
+        shell_layout.setContentsMargins(14, 14, 14, 14)
+        shell_layout.setSpacing(12)
+        self.shell.setLayout(shell_layout)
 
-    def _build_header(self) -> QFrame:
-        header = QFrame()
-        header.setObjectName("header")
+        self.top_bar = TopBar(
+            title="Launcher",
+            subtitle="",
+            show_back=False,
+        )
+        self.top_bar.back_requested.connect(self._show_home)
+        self.top_bar.close_requested.connect(self.close)
 
-        layout = QVBoxLayout()
-        layout.setContentsMargins(24, 20, 24, 20)
-        layout.setSpacing(6)
+        self.stack = QStackedWidget()
 
-        title = QLabel("PC Mode Launcher")
-        title.setObjectName("windowTitle")
+        self.home_page = HomePage(MODES)
+        self.home_page.mode_selected.connect(self._show_category)
 
-        subtitle = QLabel("Choose a mode and then a specific setup")
-        subtitle.setObjectName("windowSubtitle")
+        self.category_page = CategoryPage()
+        self.category_page.submode_selected.connect(self._handle_submode_selected)
 
-        layout.addWidget(title)
-        layout.addWidget(subtitle)
-        header.setLayout(layout)
+        self.stack.addWidget(self.home_page)
+        self.stack.addWidget(self.category_page)
 
-        return header
+        status_bar = self._build_status_bar()
 
-    def _build_cards_section(self) -> QWidget:
-        container = QWidget()
-        layout = QHBoxLayout()
-        layout.setContentsMargins(0, 0, 0, 0)
-        layout.setSpacing(18)
-        container.setLayout(layout)
+        shell_layout.addWidget(self.top_bar)
+        shell_layout.addWidget(self.stack, 1)
+        # shell_layout.addWidget(status_bar)
 
-        for mode in MODES:
-            card = ModeCard(mode)
-            card.submode_selected.connect(self._handle_submode_selected)
-            layout.addWidget(card)
+        outer_layout.addWidget(self.shell)
 
-        return container
-
-    def _build_status_section(self) -> QFrame:
-        status_frame = QFrame()
-        status_frame.setObjectName("statusFrame")
+    def _build_status_bar(self) -> QFrame:
+        frame = QFrame()
+        frame.setObjectName("statusBar")
 
         layout = QHBoxLayout()
-        layout.setContentsMargins(18, 14, 18, 14)
+        layout.setContentsMargins(12, 10, 12, 10)
 
         self.status_label = QLabel("Status: Ready")
         self.status_label.setObjectName("statusLabel")
 
         layout.addWidget(self.status_label)
-        status_frame.setLayout(layout)
+        frame.setLayout(layout)
 
-        return status_frame
+        return frame
+
+    def _show_category(self, mode: Mode) -> None:
+        self.current_mode = mode
+        self.category_page.set_mode(mode)
+
+        self.top_bar.set_back_visible(True)
+        self.top_bar.set_content(mode.name)
+        self.stack.setCurrentWidget(self.category_page)
+        self._update_status(f"{mode.name} selected")
+
+    def _show_home(self) -> None:
+        self.current_mode = None
+        self.stack.setCurrentWidget(self.home_page)
+
+        self.top_bar.set_back_visible(False)
+        self.top_bar.set_content("Launcher")
+        self._update_status("Ready")
 
     def _handle_submode_selected(self, mode_name: str, submode_name: str) -> None:
         submode = self._find_submode(mode_name, submode_name)
 
         if submode is None:
-            self.status_label.setText(f"Status: {mode_name} > {submode_name} not found")
+            self._update_status(f"{mode_name} > {submode_name} not found")
             return
 
-        self.status_label.setText(f"Status: launching {mode_name} > {submode_name}")
+        self._update_status(f"Launching {mode_name} > {submode_name}")
 
         try:
             self.launcher_service.run_actions(
                 submode.actions,
                 status_callback=self._update_status,
             )
-            self.status_label.setText(f"Status: launched {mode_name} > {submode_name}")
+            self._update_status(f"Launched {mode_name} > {submode_name}")
         except Exception as error:
-            self.status_label.setText(f"Status: error - {error}")
+            self._update_status(f"Error: {error}")
 
     def _find_submode(self, mode_name: str, submode_name: str) -> SubMode | None:
         for mode in MODES:
@@ -123,3 +144,13 @@ class MainWindow(QMainWindow):
 
     def _apply_styles(self) -> None:
         self.setStyleSheet(MAIN_STYLES)
+
+    def mousePressEvent(self, event) -> None:
+        if event.button() == Qt.LeftButton:
+            self._drag_position = event.globalPosition().toPoint() - self.frameGeometry().topLeft()
+            event.accept()
+
+    def mouseMoveEvent(self, event) -> None:
+        if event.buttons() == Qt.LeftButton:
+            self.move(event.globalPosition().toPoint() - self._drag_position)
+            event.accept()

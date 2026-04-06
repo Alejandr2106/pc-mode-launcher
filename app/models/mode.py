@@ -1,5 +1,7 @@
 from dataclasses import dataclass, field
+
 from app.models.action_type import ActionType
+
 
 @dataclass
 class Action:
@@ -14,6 +16,7 @@ class Action:
 class SubMode:
     name: str
     description: str = ""
+    icon: str = ""
     actions: list[Action] = field(default_factory=list)
 
 

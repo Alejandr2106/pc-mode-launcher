@@ -1,15 +1,17 @@
-from app.models.mode import Action, Mode, SubMode
 from app.models.action_type import ActionType
+from app.models.mode import Action, Mode, SubMode
+
 
 MODES: list[Mode] = [
     Mode(
         name="Gaming",
         emoji="🎮",
-        description="Launch your gaming setup with your favorite games and tools.",
+        description="Launch your games and gaming tools.",
         submodes=[
             SubMode(
                 name="Dofus",
                 description="Open Ankama Launcher, DofusGuide and Discord.",
+                icon="🐉",
                 actions=[
                     Action(
                         type=ActionType.OPEN_APP,
@@ -29,8 +31,9 @@ MODES: list[Mode] = [
                 ],
             ),
             SubMode(
-                name="League of Legends",
+                name="LoL",
                 description="Open your Riot setup.",
+                icon="⚔️",
                 actions=[],
             ),
         ],
@@ -38,16 +41,18 @@ MODES: list[Mode] = [
     Mode(
         name="Cinema",
         emoji="🎬",
-        description="Prepare your entertainment environment quickly.",
+        description="Open media and entertainment tools.",
         submodes=[
             SubMode(
                 name="Movie",
-                description="Open your movie apps.",
+                description="Movie setup.",
+                icon="🍿",
                 actions=[],
             ),
             SubMode(
                 name="YouTube",
-                description="Open browser and media environment.",
+                description="YouTube setup.",
+                icon="▶️",
                 actions=[],
             ),
         ],
@@ -55,11 +60,12 @@ MODES: list[Mode] = [
     Mode(
         name="Study",
         emoji="📚",
-        description="Set up your environment for focus and learning.",
+        description="Focus and productive work.",
         submodes=[
             SubMode(
                 name="Coding",
-                description="Open development tools.",
+                description="Open dev tools.",
+                icon="💻",
                 actions=[],
             ),
         ],

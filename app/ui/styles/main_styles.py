@@ -1,83 +1,103 @@
 MAIN_STYLES = """
     QMainWindow {
-        background-color: #0f1115;
+        background-color: transparent;
+    }
+
+    QWidget#rootBackground {
+        background-color: transparent;
+    }
+
+    QFrame#appShell {
+        background-color: #0b0f17;
+        border: 1px solid #1a2332;
+        border-radius: 28px;
     }
 
     QWidget {
-        color: #f3f4f6;
+        background-color: transparent;
+        color: #f5f7fb;
         font-family: "Segoe UI";
     }
 
-    QFrame#header {
-        background-color: #171a21;
-        border: 1px solid #262b36;
+    QFrame#topBar {
+        background-color: transparent;
+        border: none;
+    }
+
+    QLabel#topBarTitle {
+        font-size: 15px;
+        font-weight: 700;
+        color: #f7fbff;
+    }
+
+    QPushButton#iconButton {
+        background-color: #121927;
+        border: 1px solid #233049;
+        border-radius: 14px;
+        min-width: 32px;
+        max-width: 32px;
+        min-height: 32px;
+        max-height: 32px;
+        color: #eef4ff;
+        font-size: 14px;
+    }
+
+    QPushButton#iconButton:hover {
+        background-color: #182133;
+        border: 1px solid #5da2ff;
+    }
+
+    QFrame#iconTile {
+        background-color: #101724;
+        border: 1px solid #1f2b40;
+        border-radius: 24px;
+    }
+
+    QFrame#iconTile:hover {
+        background-color: #141d2d;
+        border: 1px solid #5da2ff;
+    }
+
+    QLabel#iconTileEmoji {
+        font-size: 30px;
+    }
+
+    QLabel#iconTileLabel {
+        font-size: 12px;
+        font-weight: 600;
+        color: #dce7ff;
+    }
+
+    QFrame#subModeChip {
+        background-color: #101724;
+        border: 1px solid #1f2b40;
         border-radius: 18px;
     }
 
-    QLabel#windowTitle {
-        font-size: 28px;
-        font-weight: 700;
+    QFrame#subModeChip:hover {
+        background-color: #141d2d;
+        border: 1px solid #5da2ff;
+    }
+
+    QLabel#subModeIcon {
+        font-size: 18px;
         color: #ffffff;
     }
 
-    QLabel#windowSubtitle {
-        font-size: 14px;
-        color: #9ca3af;
-    }
-
-    QFrame#modeCard {
-        background-color: #171a21;
-        border: 1px solid #262b36;
-        border-radius: 20px;
-    }
-
-    QFrame#modeCard:hover {
-        border: 1px solid #4f8cff;
-    }
-
-    QLabel#cardIcon {
-        font-size: 42px;
-    }
-
-    QLabel#cardTitle {
-        font-size: 20px;
+    QLabel#subModeName {
+        font-size: 13px;
         font-weight: 700;
-        color: #ffffff;
+        color: #eef4ff;
     }
 
-    QLabel#cardDescription {
-        font-size: 13px;
-        color: #aeb6c2;
-    }
-
-    QPushButton#subModeButton {
-        background-color: #1f2430;
-        color: #f3f4f6;
-        border: 1px solid #31384a;
-        border-radius: 12px;
-        padding: 12px 14px;
-        font-size: 13px;
-        font-weight: 600;
-        text-align: left;
-    }
-
-    QPushButton#subModeButton:hover {
-        background-color: #2a3140;
-        border: 1px solid #4f8cff;
-    }
-
-    QPushButton#subModeButton:pressed {
-        background-color: #1a1f2a;
-    }
-
-    QFrame#statusFrame {
-        background-color: #171a21;
-        border: 1px solid #262b36;
+    QFrame#statusBar {
+        background-color: #101724;
+        border: 1px solid #1f2b40;
         border-radius: 16px;
     }
 
     QLabel#statusLabel {
-        font-size: 13px;
-        color: #d1d5db;
+        font-size: 11px;
+        color: #aebddb;
     }
 """
